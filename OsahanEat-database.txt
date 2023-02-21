@@ -1,0 +1,132 @@
+CREATE DATABASE osahan_db;
+
+USE osahan_db;
+
+CREATE TABLE IF NOT EXISTS role (
+    id INT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(50) NOT NULL,
+    description VARCHAR(100),
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS user (
+    id INT NOT NULL AUTO_INCREMENT,
+    email VARCHAR(50) NOT NULL,
+    password VARCHAR(50) NOT NULL,
+    fullname VARCHAR(50) NOT NULL,
+    address VARCHAR(100) NOT NULL,
+    role_id int NOT NULL,
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS rating_restaurant (
+    id INT NOT NULL AUTO_INCREMENT,
+    user_id int NOT NULL,
+    restaurant_id int NOT NULL,
+    star int,
+    comment VARCHAR(255),
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS rating_food (
+    id INT NOT NULL AUTO_INCREMENT,
+    user_id int NOT NULL,
+    food_id int NOT NULL,
+    star int,
+    comment VARCHAR(255),
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS rating_order (
+    id INT NOT NULL AUTO_INCREMENT,
+    user_id int NOT NULL,
+    order_id int NOT NULL,
+    star int,
+    comment VARCHAR(255),
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS restaurant (
+    id INT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(50) NOT NULL,
+    address VARCHAR(100) NOT NULL,
+    description VARCHAR(200),
+    rating float,
+    content VARCHAR(200),
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS category_restaurant (
+    id INT NOT NULL AUTO_INCREMENT,
+    category_id int NOT NULL,
+    restaurant_id int NOT NULL,
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS category (
+    id INT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(50) NOT NULL,
+    description VARCHAR(100),
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS food (
+    id INT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(50) NOT NULL,
+    description VARCHAR(200),
+    price float NOT NULL,
+    instruction VARCHAR(200),
+    category_id int NOT NULL,
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS orders (
+    id INT NOT NULL AUTO_INCREMENT,
+    user_id int NOT NULL,
+    total_price float NOT NULL,
+    date DATE NOT NULL,
+    status VARCHAR(50) NOT NULL,
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS orders_item (
+    order_id int NOT NULL,
+    food_id int NOT NULL,
+    amount int NOT NULL,
+    price float NOT NULL,
+    coupon_id int NOT NULL,
+    PRIMARY KEY (order_id,food_id)
+);
+
+CREATE TABLE IF NOT EXISTS coupon (
+    id INT NOT NULL AUTO_INCREMENT,
+    code VARCHAR(50) NOT NULL,
+    description VARCHAR(100),
+    discount float NOT NULL,
+    cate_res_id int NOT NULL,
+    PRIMARY KEY (id)
+);
+
+ALTER TABLE user ADD FOREIGN KEY (role_id) REFERENCES role (id) ON DELETE CASCADE;
+
+ALTER TABLE rating_restaurant ADD FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE;
+ALTER TABLE rating_restaurant ADD FOREIGN KEY (restaurant_id) REFERENCES restaurant (id) ON DELETE CASCADE;
+
+ALTER TABLE rating_food ADD FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE;
+ALTER TABLE rating_food ADD FOREIGN KEY (food_id) REFERENCES food (id) ON DELETE CASCADE;
+
+ALTER TABLE rating_order ADD FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE;
+ALTER TABLE rating_order ADD FOREIGN KEY (order_id) REFERENCES orders (id) ON DELETE CASCADE;
+
+ALTER TABLE orders ADD FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE;
+
+ALTER TABLE orders_item ADD FOREIGN KEY (order_id) REFERENCES orders (id) ON DELETE CASCADE;
+ALTER TABLE orders_item ADD FOREIGN KEY (food_id) REFERENCES food (id) ON DELETE CASCADE;
+ALTER TABLE orders_item ADD FOREIGN KEY (coupon_id) REFERENCES coupon (id) ON DELETE CASCADE;
+
+ALTER TABLE category_restaurant ADD FOREIGN KEY (category_id) REFERENCES category (id) ON DELETE CASCADE;
+ALTER TABLE category_restaurant ADD FOREIGN KEY (restaurant_id) REFERENCES restaurant (id) ON DELETE CASCADE;
+
+ALTER TABLE food ADD FOREIGN KEY (category_id) REFERENCES category (id) ON DELETE CASCADE;
+
+ALTER TABLE coupon ADD FOREIGN KEY (cate_res_id) REFERENCES category_restaurant (id) ON DELETE CASCADE;
