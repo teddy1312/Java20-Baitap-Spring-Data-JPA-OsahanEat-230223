@@ -1,9 +1,6 @@
 package com.example.Java20BaitapSpringDataJPA.OsahanEat3.entity;
 
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Entity(name = "orders_item")
 public class Orders_item {
@@ -14,8 +11,19 @@ public class Orders_item {
     @JoinColumn(name = "coupon_id")
     private Coupon coupon;
 
+    @Column(name = "amount")
     private int amount;
+
+    @Column(name = "price")
     private float price;
+
+    @ManyToOne()
+    @JoinColumn(name = "order_id",insertable = false,updatable = false)
+    private Orders orders;
+
+    @ManyToOne()
+    @JoinColumn(name = "food_id",insertable = false,updatable = false)
+    private Food food;
 
     public Orders_item_ID getOrders_item_id() {
         return orders_item_id;
@@ -47,5 +55,21 @@ public class Orders_item {
 
     public void setPrice(float price) {
         this.price = price;
+    }
+
+    public Orders getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Orders orders) {
+        this.orders = orders;
+    }
+
+    public Food getFood() {
+        return food;
+    }
+
+    public void setFood(Food food) {
+        this.food = food;
     }
 }

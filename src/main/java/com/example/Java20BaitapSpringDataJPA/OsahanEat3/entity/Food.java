@@ -28,6 +28,9 @@ public class Food {
     @OneToMany(mappedBy = "food")
     private Set<Rating_food> rating_food;
 
+    @OneToMany(mappedBy = "food")
+    private Set<Orders_item> orders_item;
+
     public int getId() {
         return id;
     }
@@ -84,4 +87,11 @@ public class Food {
         this.rating_food = rating_food;
     }
 
+    public Set<Orders_item> getOrders_item() {
+        return orders_item;
+    }
+
+    public void setOrders_item(Set<Orders_item> orders_item) {
+        this.orders_item = orders_item;
+    }
 }

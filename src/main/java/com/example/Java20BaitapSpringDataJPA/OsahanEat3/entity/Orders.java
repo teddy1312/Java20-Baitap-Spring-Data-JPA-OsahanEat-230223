@@ -26,6 +26,9 @@ public class Orders {
     @OneToMany(mappedBy = "orders")
     private Set<Rating_order> rating_order;
 
+    @OneToMany(mappedBy = "orders")
+    private Set<Orders_item> orders_item;
+
     public int getId() {
         return id;
     }
@@ -72,5 +75,13 @@ public class Orders {
 
     public void setRating_order(Set<Rating_order> rating_order) {
         this.rating_order = rating_order;
+    }
+
+    public Set<Orders_item> getOrders_item() {
+        return orders_item;
+    }
+
+    public void setOrders_item(Set<Orders_item> orders_item) {
+        this.orders_item = orders_item;
     }
 }
